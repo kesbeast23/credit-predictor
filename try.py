@@ -1,3 +1,4 @@
+#importing python packages that are going to be used
 import pandas as pd
 import numpy as np
 import re
@@ -5,7 +6,7 @@ import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("german_credit_data.csv")
+df = pd.read_csv("german_credit_data.csv")#reading the dataset that is going to be used by the model
 print(df.info())
 #Looking unique values
 print(df.nunique())
@@ -13,7 +14,7 @@ print(df.nunique())
 print(df.head())
 df.replace(to_replace ="good", 
                             value =1) 
-include = ['Age', 'Sex', 'Job', 'Housing','Saving accounts','Checking account','Credit amount','Duration','Purpose','Risk'] # Only four features
+include = ['Age', 'Sex', 'Job', 'Housing','Saving accounts','Checking account','Credit amount','Duration','Purpose','Risk'] # selection of features
 df_ = df[include]
 categoricals = []
 for col, col_type in df_.dtypes.iteritems():
@@ -24,15 +25,15 @@ for col, col_type in df_.dtypes.iteritems():
 
 df_ohe = pd.get_dummies(df_, columns=categoricals, dummy_na=True)
 
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression # importing scikit-learn's Logistic Regression
 dependent_variable = 'Risk'
 x = df_ohe[df_ohe.columns.difference([dependent_variable])]
 y = df_ohe[dependent_variable]
 lr = LogisticRegression()
-lr.fit(x, y)
+lr.fit(x, y) #fitting of the model
 
 from sklearn.externals import joblib
-joblib.dump(lr, 'model.pkl')
+joblib.dump(lr, 'model.pkl')#saving the model
 
 # Load the model that  just saved
 lr = joblib.load('model.pkl')
